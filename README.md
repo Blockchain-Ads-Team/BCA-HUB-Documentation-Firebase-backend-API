@@ -11,7 +11,7 @@ The endpoints are broken into 3 major sections:
 
 
 ##### SUMMARY
-- **BASE URL**: https://us-central1-bca-app-c8ef0.cloudfunctions.net/app/
+- **BASE URL**: https://us-central1-web3-marketing-hub.cloudfunctions.net/api
 - **HOST**: Google Firebase (GCP)
 - **DB**: Firestore
 - **AUTH**: Firebase Auth
@@ -34,7 +34,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-bca-app-c8ef0.cloudfunctions.net/app/APIavailability", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailability", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -62,7 +62,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-bca-app-c8ef0.cloudfunctions.net/app/getAllCurrencies", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/getAllCurrencies", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -233,7 +233,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-bca-app-c8ef0.cloudfunctions.net/app/paymentOnSite", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/paymentOnSite", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -303,7 +303,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-bca-app-c8ef0.cloudfunctions.net/app/paymentWithInvoice", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/paymentWithInvoice", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -365,7 +365,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-bca-app-c8ef0.cloudfunctions.net/app/checkPaymentStatus", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/checkPaymentStatus", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
