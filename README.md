@@ -317,6 +317,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 {
   uuid:             (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
   organizationID:   (String): "ID for the organization the new user is being invited into",
+  senderName:       (String): "This is the name of the sender, picked up from the user object returned in the SDK",
   inviteeEmail:     (String): "The email for the user being invited into the organization"
 }
 ```
@@ -330,7 +331,8 @@ myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify({
   "uuid": "<User unique ID>",
   "organizationID": "<organization-ID>",
-  "inviteeEmail": "<The invited email>",
+  "senderName": "<sender-name>",
+  "inviteeEmail": "<The invited email>"
 });
 
 var requestOptions = {
