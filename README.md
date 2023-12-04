@@ -32,6 +32,8 @@ The endpoints are broken into 3 major sections:
   organization:    (String): "This is the name for the organization from the form input",
   email:           (String): "The email address for the new user from the form input",
   password:        (String): "The user's account password from the form",
+  invited:         (Boolean): "This endpoint resolves to true or false from the url parameter. If the user is invited, it is true, if the user is not invited it stays false",
+  inviteOrgID:     (String): "If the Invited parameter is true, then the inviteOrgID has to contain an ID, else, the inviteORGID can be set to null",
 }
 ```
 
@@ -44,7 +46,9 @@ myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify({
   "organization": "<organization-Name>",
   "email": "<user-email>",
-  "password": "<user-password>"
+  "password": "<user-password>",
+  "invited": "<true|false>",
+  "inviteOrgID":"<organizationID>"
 });
 
 var requestOptions = {
