@@ -24,7 +24,7 @@ The endpoints are broken into 3 major sections:
 ##### (1)
 **ENDPOINT:** ```/newSignUp``` </br>
 **ACTION:** POST </br>
-**DETAIL:** This endpoint is for creating a new user account with via the form. Once the form is filled, the frontend application sends a post request with that information to the endpoint, a new account is created, a success status us sent, and the user can then be prompted to login </br>
+**DETAIL:** This endpoint is for creating a new user account via the form fields collected. Once the form is filled, the frontend application sends a post request with that information to the endpoint, a new account is created, a success status us sent, and the user can then be prompted to login </br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
@@ -96,7 +96,7 @@ var raw = {
   "uuid":"<user-unique-ID>", 
   "photoURL": "<profile-image-url>",
   "name": "<user name>",
-  "invited": <true|false>,
+  "invited": "<true|false>",
   "inviteOrgID":"<organizationID>",
   };
 
@@ -265,11 +265,8 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 {
   uuid:            (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
   info:            (object):{
-
                               "name": "The user's new name for update",
                               "email": "The user's new email for the update",
-                              "phone_number":" The user's new phone number for update"
-
                             }
 }
 ```
@@ -353,7 +350,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### [ACCOUNT ACTIONS]
+##### [PAYMENT ACTIONS]
 ##### (1)
 **ENDPOINT:** ```/APIavailability``` </br>
 **ACTION:** GET </br>
