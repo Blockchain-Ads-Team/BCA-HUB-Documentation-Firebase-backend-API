@@ -905,11 +905,11 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "uuid": "456785yuj9787",
-  "campaignId": "7737034",
+  "campaignId": 7737034,
   "creatorEmail": "abMan@gmail.com",
   "newCampaignInfo": {
     "name": "Hookah Test",
-    "limit_total_amount": 5000
+    "limit_total_amount": 500
   }
 });
 
@@ -990,7 +990,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/startOrStop
 {
   uuid:                (String): "The unique ID for the user making the payment",
   day_from:            (String): "This defines which day the collacted statistics data should start from in the format dd-mm-yyyy"
-  campaignId:          (Number): "The ID for the campaign to be viewed",
+  campaignId:          (Array): "An array containing the ID for the campaign to be viewed",
 }
 
 ```
@@ -1003,7 +1003,7 @@ myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify({
   "uuid": "jhbjsfhsdj9989",
   "day_from": "01/01/2023",
-  "campaignId": 7730229
+  "campaignId": [7730229]
 });
 
 var requestOptions = {
