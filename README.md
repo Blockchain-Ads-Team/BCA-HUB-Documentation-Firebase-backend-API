@@ -23,7 +23,7 @@ The endpoints are broken into 4 major sections:
 ---
 
 ##### (1)
-**ENDPOINT:** ```/APIavailability``` </br>
+**ENDPOINT:** ```/APIavailable``` </br>
 **ACTION:** GET </br>
 **DETAIL:** This endpoint lets the developer get a response from the API server, to know if it is alive and working fine. It responds with a single line of text to give it's availaility status. No response shows that the server is either dead or it's crashed. </br>
 
@@ -35,7 +35,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailability", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailable", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
