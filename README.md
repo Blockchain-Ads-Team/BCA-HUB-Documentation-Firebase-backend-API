@@ -49,6 +49,51 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailabl
 
 ---
 
+##### (2)
+**ENDPOINT:** ```/APIavailableWithAuth``` </br>
+**ACTION:** GET </br>
+**DETAIL:** This endpoint works almost the same way as the endpoint above, APIavailable, but in this case, it takes in uuid, and the user authorization token in its header, to ensure that a user is logged in and that the same user is the one making an API call. </br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:       (String): "This is the unique ID created by Google when the account was created, it is also in the browser context, as UID",
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzMmNjMWNiMjg5ZGQ0NjI2YTQzNWQ3Mjk4OWFlNDMyMTJkZWZlNzgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vd2ViMy1tYXJrZXRpbmctaHViIiwiYXVkIjoid2ViMy1tYXJrZXRpbmctaHViIiwiYXV0aF90aW1lIjoxNzAzMzgyODQ5LCJ1c2VyX2lkIjoiMG1QUEpqU3R0Z2NNSmpJdExIV2hoRHpadjM4MyIsInN1YiI6IjBtUFBKalN0dGdjTUpqSXRMSFdoaER6WnYzODMiLCJpYXQiOjE3MDMzODI4NDksImV4cCI6MTcwMzM4NjQ0OSwiZW1haWwiOiJwZXRlci4zYm9kZUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicGV0ZXIuM2JvZGVAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.IgYuHTxreuhe59SnufQE2tjagEcpJoEzfnD9i9jvRXT_Rl_ZF07FsiFPLEQv32lLmx1bcf-9tIn8NtHnI2AT53UBWCI_7Jyl4oExPeLo-fgRSTwtWR-NLuC9gX6QFRz66uqHkdq4hkxwlRsodRvUBG0To94mBMrfmFnjZeno6Rw1Vhmg6vrGN_NfY0nHSwwCarQkisoGYyTwOmhy-u3-rjSORdCH6bKUAqj0NZ_xH-PC6HfNrcr-Z2VUo1JdYeg0VbX9fS9Or0EjkGsj8uh2sjaX2L82IxrnzxDxSUXoquw4t_ZyEhlVEuLMRcvXq09_JAasUFQmMuClc_L50VVd2w\"");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "0mPPJjSttgcMJjItLHWhhDzZv383"
+});
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:5000/web3-marketing-hub/us-central1/api/APIavailableWithAuth", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(TEXT)
+- 200 `Blockchain-Ad API Server is up and running.`
+- 4xx `<Errors from incomplete request body>`
+- - 4xx `<Errors for unauthorized users>`
+- 5xx `<try/catch error response>`
+
+---
+
 
 ##### [ACCOUNT ACTIONS]
 ---
@@ -765,7 +810,6 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/checkPaymen
                       {
                         campaignName:(String): Name of the Campaign being created,
                         targetURL:(String): The url that ad clicker would be sent to,
-                        startDate:(String): Day for the advert to start showing in dd/mm/yyyy format,
                         budget:(Number): The budget amount for campaign,
                         maxCPC:(Number): This is the price a user is willing to pay for a click on an advert shown,
                         timezone:(Number): The timezone for the advert to be shown,
@@ -796,7 +840,6 @@ var raw = JSON.stringify({
   "campaignInfo": {
     "campaignName": "API Test Campaign",
     "targetURL": "https://abc.xyz",
-    "startDate": "",
     "budget": "500",
     "maxCPC": "0.25",
     "timezone": 3,
