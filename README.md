@@ -819,7 +819,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/checkPaymen
                       {
                         campaignName:(String): Name of the Campaign being created,
                         targetURL:(String): The url that ad clicker would be sent to,
-                        "start_date": The date for the ads to be started in dd/MM/YYYY format,
+                        startDate: The date for the ads to be started in dd/MM/YYYY format,
                         budget:(Number): The budget amount for campaign,
                         maxCPC:(Number): This is the price a user is willing to pay for a click on an advert shown,
                         timezone:(Number): The timezone for the advert to be shown,
@@ -851,6 +851,7 @@ var raw = JSON.stringify({
   "campaignInfo": {
     "campaignName": "API Test Campaign",
     "targetURL": "https://abc.xyz",
+    "startDate": "23/12/2023"
     "budget": "500",
     "maxCPC": "0.25",
     "timezone": 3,
