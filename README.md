@@ -734,7 +734,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/paymentWith
 ---
 
 ---
-##### (3)
+##### (4)
 **ENDPOINT:** ```/checkPaymentStatus```</br>
 **ACTION:** GET</br>
 **DETAIL:** This endpoint is used to get information about a payment.</br>
@@ -856,7 +856,7 @@ var raw = JSON.stringify({
     "maxCPC": "0.25",
     "timezone": 3,
     "smartContractAddress": "0x0000000000000000000000000000000000001000",
-    "chainTargeting": "BSCSCAN",
+    "chainTargeting": ["BSCSCAN"],
     "operatingSystem": [],
     "deviceType": []
   },
@@ -1085,7 +1085,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateURL",
 
 ---
 
-##### (7)
+##### (6)
 **ENDPOINT:** ```/addNewCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates a campaign info/data target URL, with a new URL, the URL is where viewers of the Ads are directed to, when they click. Now takes authorization token for route protection.</br>
@@ -1143,7 +1143,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/addNewCreat
 
 ---
 
-##### (8)
+##### (7)
 **ENDPOINT:** ```/startOrStopCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates/edits an already created creative. Now takes authorization token for route protection.</br>
