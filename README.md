@@ -245,6 +245,52 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ---
 
 ##### (4)
+**ENDPOINT:** ```/loadCampaignData``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint is for getting all of the organization's campaign data on a user's profile. It pulls all the campaign ID, and retrieves the data for that campaign, which is returned. It should be called after the loadprofile endpoint as the currentOrganizationID required to make a valud loadCampaignData is returned in the loadUserProfile endpoint. You could add an animation, as it would take longer, due to the provider not creating an endpoint to directly check for the campaign status, and this has to be done one after the other. It takes authorization token for route protection.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:    (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  currentOrganizationID: "The user's current organization ID, returned in the response of the loadUserProfile endpoint call"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer <token>\"");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "<uuid>"
+  "currentOrganizationID": "<currentOrganizationID>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadCampaignData", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Campaign data retrieved successfully, res_data: <campaignData> }`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (5)
 **ENDPOINT:** ```/switchOrganization``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for switching the user's organization while logged in. To switch the organization, they make a call to the endpoint with the organization's ID they want to switch to and also their own ID to ensure they are logged in. Now takes authorization token for route protection.</br>
@@ -290,7 +336,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### (5)
+##### (6)
 **ENDPOINT:** ```/createNewOrganization``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for creating a new Organization and adding that individual as the admin and member of the organization. Now takes authorization token for route protection.</br>
@@ -337,7 +383,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ---
 
 
-##### (6)
+##### (7)
 **ENDPOINT:** ```/updateUserInfo``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for the user to update their information. It can update the user's information on the profile page. Now takes authorization token for route protection.</br>
@@ -386,7 +432,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### (7)
+##### (8)
 **ENDPOINT:** ```/inviteUser``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for the only Admins/creators of an organization to invite others into the organization. Now takes authorization token for route protection.</br>
