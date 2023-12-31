@@ -79,7 +79,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("http://localhost:5000/web3-marketing-hub/us-central1/api/APIavailableWithAuth", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailableWithAuth", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -202,7 +202,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/completeSIg
 
 ##### (3)
 **ENDPOINT:** ```/loadUserProfile``` </br>
-**ACTION:** POST </br>
+**ACTION:** GET </br>
 **DETAIL:** This endpoint is for getting user information during the login process. Once a user logs in, either via the form or via one click sign In, You use the google AUTH SDK for that, you can read the documentation [here](https://firebase.google.com/docs/auth/web/password-auth), once you get a successful response from the call to Google, you then call this endpoint, to pull all the user's information from the database and render it on the dashboard page. Now takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -224,7 +224,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'POST',
+  method: 'GET',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
@@ -246,7 +246,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ##### (4)
 **ENDPOINT:** ```/loadCampaignData``` </br>
-**ACTION:** POST </br>
+**ACTION:** GET </br>
 **DETAIL:** This endpoint is for getting all of the organization's campaign data on a user's profile. It pulls all the campaign ID, and retrieves the data for that campaign, which is returned. It should be called after the loadprofile endpoint as the currentOrganizationID required to make a valud loadCampaignData is returned in the loadUserProfile endpoint. You could add an animation, as it would take longer, due to the provider not creating an endpoint to directly check for the campaign status, and this has to be done one after the other. It takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -270,7 +270,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'POST',
+  method: 'GET',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
@@ -291,6 +291,58 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadCampaig
 ---
 
 ##### (5)
+**ENDPOINT:** ```/loadBlockchainData``` </br>
+**ACTION:** GET </br>
+**DETAIL:** This endpoint makes an HTTP GET request to retrieve blockchain data for the smart Contract address, tied to the campaign, created by users. The request should include parameters such as uuid, chainNetwork, smartContractAddress, page, and order. It takes authorization token in it's header for route protection.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  chainNetwork:          (String): "The blockchain Network on which the smart Contract resides, to pull data from, the two supported blockchain networks are 'BSC' and 'ETH'",
+  smartContractAddress:  (String): " The blockchain smart contract address to be queried for transaction data. An example of a 'BSC' address is: '0xF426a8d0A94bf039A35CEE66dBf0227A7a12D11e' ",
+  page:                  (Number): "This for selecting the current page to show data, starting from page 1. Each page returns 10 items, to continue from the 11th to 21st items for the same address, the page number should be switched to 2, and then 3 and so forth",
+  order:                 (String): "This is the order in which the transactions shouls be listed, in either ascending order('asc') or descending order('desc'). The current default is 'desc'",
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "Bearer <token>");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "0mPPJjSttgcMJjItLHWhhDzZv383",
+  "chainNetwork": "BSC",
+  "smartContractAddress": "0xF426a8d0A94bf039A35CEE66dBf0227A7a12D11e",
+  "page": 1,
+  "order": "desc"
+});
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadBlockchainData", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Blockchain data retrieved successfully, res_data: <blockchainData> }`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (6)
 **ENDPOINT:** ```/switchOrganization``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for switching the user's organization while logged in. To switch the organization, they make a call to the endpoint with the organization's ID they want to switch to and also their own ID to ensure they are logged in. Now takes authorization token for route protection.</br>
@@ -336,7 +388,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### (6)
+##### (7)
 **ENDPOINT:** ```/createNewOrganization``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for creating a new Organization and adding that individual as the admin and member of the organization. Now takes authorization token for route protection.</br>
@@ -383,7 +435,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ---
 
 
-##### (7)
+##### (8)
 **ENDPOINT:** ```/updateUserInfo``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for the user to update their information. It can update the user's information on the profile page. Now takes authorization token for route protection.</br>
@@ -432,7 +484,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### (8)
+##### (9)
 **ENDPOINT:** ```/inviteUser``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for the only Admins/creators of an organization to invite others into the organization. Now takes authorization token for route protection.</br>
@@ -938,7 +990,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/createNewCa
 
 ##### (2)
 **ENDPOINT:** ```/viewCampaignInfo``` </br>
-**ACTION:** POST </br>
+**ACTION:** GET </br>
 **DETAIL:** This endpoint retrieves info about a campaign with its ID. Now takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -962,7 +1014,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'POST',
+  method: 'GET',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
