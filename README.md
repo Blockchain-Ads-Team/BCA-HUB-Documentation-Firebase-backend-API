@@ -202,7 +202,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/completeSIg
 
 ##### (3)
 **ENDPOINT:** ```/loadUserProfile``` </br>
-**ACTION:** GET </br>
+**ACTION:** POST </br>
 **DETAIL:** This endpoint is for getting user information during the login process. Once a user logs in, either via the form or via one click sign In, You use the google AUTH SDK for that, you can read the documentation [here](https://firebase.google.com/docs/auth/web/password-auth), once you get a successful response from the call to Google, you then call this endpoint, to pull all the user's information from the database and render it on the dashboard page. Now takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -224,7 +224,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'GET',
+  method: 'POST',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
@@ -246,7 +246,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ##### (4)
 **ENDPOINT:** ```/loadCampaignData``` </br>
-**ACTION:** GET </br>
+**ACTION:** POST </br>
 **DETAIL:** This endpoint is for getting all of the organization's campaign data on a user's profile. It pulls all the campaign ID, and retrieves the data for that campaign, which is returned. It should be called after the loadprofile endpoint as the currentOrganizationID required to make a valud loadCampaignData is returned in the loadUserProfile endpoint. You could add an animation, as it would take longer, due to the provider not creating an endpoint to directly check for the campaign status, and this has to be done one after the other. It takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -270,7 +270,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'GET',
+  method: 'POST',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
@@ -292,7 +292,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadCampaig
 
 ##### (5)
 **ENDPOINT:** ```/loadBlockchainData``` </br>
-**ACTION:** GET </br>
+**ACTION:** POST </br>
 **DETAIL:** This endpoint makes an HTTP GET request to retrieve blockchain data for the smart Contract address, tied to the campaign, created by users. The request should include parameters such as uuid, chainNetwork, smartContractAddress, page, and order. It takes authorization token in it's header for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -322,7 +322,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'GET',
+  method: 'POST',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
@@ -990,7 +990,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/createNewCa
 
 ##### (2)
 **ENDPOINT:** ```/viewCampaignInfo``` </br>
-**ACTION:** GET </br>
+**ACTION:** POST </br>
 **DETAIL:** This endpoint retrieves info about a campaign with its ID. Now takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -1014,7 +1014,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'GET',
+  method: 'POST',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
