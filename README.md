@@ -69,7 +69,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "0mPPJjSttgcMJjItLHWhhDzZv383"
+  "uuid": "<user-unique-ID>"
 });
 
 var requestOptions = {
@@ -220,7 +220,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<uuid>"
+  "uuid": "<user-unique-ID>"
 });
 
 var requestOptions = {
@@ -265,7 +265,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<uuid>"
+  "uuid": "<user-unique-ID>"
   "currentOrganizationID": "<currentOrganizationID>"
 });
 
@@ -314,7 +314,7 @@ myHeaders.append("Authorization", "Bearer <token>");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "0mPPJjSttgcMJjItLHWhhDzZv383",
+  "uuid": "<user-unique-ID>",
   "chainNetwork": "BSC",
   "smartContractAddress": "0xF426a8d0A94bf039A35CEE66dBf0227A7a12D11e",
   "page": 1,
@@ -343,6 +343,175 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadBlockch
 ---
 
 ##### (6)
+**ENDPOINT:** ```/connectAnalyticsAccount``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint works after an authorization code has been retrieved from Google's authorization. The retrieved code is sent to this endpoint to create a connection with the user's account and the credentials stored in the DB for later connection re-establishment.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  authCode:               (String): "String for code retrieved from Google authorization"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer <token>");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>",
+  "authCode": "<authCode>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/connectAnalyticsAccount", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Google analytics account connected successfully}`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (7)
+**ENDPOINT:** ```/disconnectAnalyticsAccount``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint lets a user revoke our connection to their Google analytics account. It revokes their connection and drops their credentials from the database.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer <token>");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/disconnectAnalyticsAccount", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Google analytics account disconnected successfully}`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (8)
+**ENDPOINT:** ```/loadAnalyticsProject``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint works to retrieve a summary of the user's Google profile data, all their connected and monitored projects with their IDs. The IDs can then be used in the next endpoint call to query the data for those projects.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer <token>");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyticsProfile", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+##### (9)
+**ENDPOINT:** ```/loadAnalyticsProfile``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint works to retrieve all the data related to a project, The project is identified by it's project ID, whcich is sent as a part of the JSON payload.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK"
+  projectID:             (String): "The id for the project to be queried."
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer <token>");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>",
+  "projectID": "<project-id>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyticsProfile", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Google analytics projects retrieved, res_data: <profile_data>}`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (10)
 **ENDPOINT:** ```/switchOrganization``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for switching the user's organization while logged in. To switch the organization, they make a call to the endpoint with the organization's ID they want to switch to and also their own ID to ensure they are logged in. Now takes authorization token for route protection.</br>
@@ -363,7 +532,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<User unique ID>",
+  "uuid": "<user-unique-ID>",
   "organizationID": "<organization-ID>",
 });
 
@@ -388,7 +557,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### (7)
+##### (11)
 **ENDPOINT:** ```/createNewOrganization``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for creating a new Organization and adding that individual as the admin and member of the organization. Now takes authorization token for route protection.</br>
@@ -409,7 +578,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<User unique ID>",
+  "uuid": "<user-unique-ID>",
   "organizationName": "<organization-Name>",
 });
 
@@ -435,7 +604,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ---
 
 
-##### (8)
+##### (12)
 **ENDPOINT:** ```/updateUserInfo``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for the user to update their information. It can update the user's information on the profile page. Now takes authorization token for route protection.</br>
@@ -459,7 +628,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<User unique ID>",
+  "uuid": "<user-unique-ID>",
   "info": "{"name": "<user-name>", "email":"user-email", "phone_number":"<user-number>"}"
 });
 
@@ -484,7 +653,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 
 ---
 
-##### (9)
+##### (13)
 **ENDPOINT:** ```/inviteUser``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint is used for the only Admins/creators of an organization to invite others into the organization. Now takes authorization token for route protection.</br>
@@ -507,7 +676,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<User unique ID>",
+  "uuid": "<user-unique-ID>",
   "organizationID": "<organization-ID>",
   "senderName": "<sender-name>",
   "inviteeEmail": "<The invited email>"
@@ -715,7 +884,7 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "price_amount": 400,
-  "uuid": "rfu5WO55nPRpgV0yjQ7f0kxsEvC2",
+  "uuid": "<user-unique-ID>",
   "pay_currency": "ltc"
 });
 
@@ -788,7 +957,7 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "price_amount": 1000,
-  "uuid": "<uuid>"
+  "uuid": "<user-unique-ID>"
 });
 
 var requestOptions = {
@@ -851,7 +1020,7 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "paymentId": 6366009964,
-  "uuid": "<uuid>"
+  "uuid": "<user-unique-ID>"
 });
 
 var requestOptions = {
@@ -945,7 +1114,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "3uzjwJi3vceUgqKD3HFaL8IQI443",
+  "uuid": "<user-unique-ID>",
   "campaignInfo": {
     "campaignName": "API Test Campaign",
     "targetURL": "https://abc.xyz",
@@ -1009,7 +1178,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "3uzjwJi3vceUgqKD3HFaL8IQI443",
+  "uuid": "<user-unique-ID>",
   "campaignId": 7736830
 });
 
@@ -1059,7 +1228,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "456785yuj9787",
+  "uuid": "<user-unique-ID>",
   "campaignId": 7737034,
   "creatorEmail": "abMan@gmail.com",
   "newCampaignInfo": {
@@ -1110,7 +1279,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "456785yuj9787",
+  "uuid": "<user-unique-ID>",
   "creativeId": 19823539,
   "toPlayCreative": false
 });
@@ -1158,7 +1327,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "456785yuj9787",
+  "uuid": "<user-unique-ID>",
   "campaignId": 7737040,
   "newTargetURL": "https://abcabc.xyz"
 });
@@ -1211,7 +1380,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "456785yuj9787",
+  "uuid": "<user-unique-ID>",
   "campaignId": 7737040,
   "creatives": [
     {
@@ -1263,7 +1432,7 @@ myHeaders.append("Authorization", "\"Bearer <token>\"");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "456785yuj9787",
+  "uuid": "<user-unique-ID>",
   "creativeId": 19819692,
   "toPlayCreative": true
 });
