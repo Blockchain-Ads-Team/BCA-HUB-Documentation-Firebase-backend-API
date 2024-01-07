@@ -616,6 +616,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
   info:            (object):{
                               "name": "The user's new name for update",
                               "email": "The user's new email for the update",
+                              "profile_image": "The link to the user's new profile image hosted on our Google storage"
                             }
 }
 ```
@@ -630,6 +631,7 @@ myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>",
   "info": "{"name": "<user-name>", "email":"user-email", "phone_number":"<user-number>"}"
+  "profile_image": "<image-URL>"
 });
 
 var requestOptions = {
@@ -689,7 +691,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserProfile", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/inviteUser", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -697,7 +699,142 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ```
 
 ###### RESPONSE DATA(TEXT)
-- 200 `Blockchain-Ad API Server is up and running.`
+- 200 `Invite Emails sending to user.`
+- 4xx `<Errors from incomplete request body>`
+- 5xx `<try/catch error response>`
+
+---
+
+##### (14)
+**ENDPOINT:** ```/acceptInvite``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint is hosted on a page with buttons, where the accept button calls the accept I=invite endpoint. It accepts the user into the organization as a member and returns a new loadUserprofile object. An email is sent to the admin to let them know invite has been accepted</br>
+
+**REQUEST DATA(JSON):** All data in the  body is required for a valid request.
+```
+{
+  uuid:             (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  organizationID:   (String): "ID for the organization the new user is being invited into"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer <token>\"");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>",
+  "organizationID": "<organization-ID>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/acceptInvite", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(TEXT)
+- 200 `Invite accept successful and user data retrieved successfully`
+- 4xx `<Errors from incomplete request body>`
+- 5xx `<try/catch error response>`
+
+---
+
+##### (15)
+**ENDPOINT:** ```/rejectInvite``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint is hosted on a page with buttons, where the reject button calls this reject invite endpoint. It removes the user from the invite link, and also sends an email to the admin to let him know a user rejected the invitation.</br>
+
+**REQUEST DATA(JSON):** All data in the  body is required for a valid request.
+```
+{
+  uuid:             (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  organizationID:   (String): "ID for the organization the new user is being invited into"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer <token>\"");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>",
+  "organizationID": "<organization-ID>"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/rejectInvite", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(TEXT)
+- 200 `Invite to Organization Rejected`
+- 4xx `<Errors from incomplete request body>`
+- 5xx `<try/catch error response>`
+
+---
+
+##### (16)
+**ENDPOINT:** ```/resetAccountPassword``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint takes in an email address and sends that user, if they are an actual user, a reset password link for the account password. No route protection on here.</br>
+
+**REQUEST DATA(JSON):** All data in the  body is required for a valid request.
+```
+{
+ "email": "Them email address of the user requesting a password chane"
+}
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer <token>\"");
+
+var raw = JSON.stringify({
+  "email": "<eemail>",
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/resetAccountPassword", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(TEXT)
+- 200 `Email sent || Current security warning`
 - 4xx `<Errors from incomplete request body>`
 - 5xx `<try/catch error response>`
 
@@ -733,128 +870,128 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/getAllCurre
 - 200 (Response Example)
 ```json
 {
-    [
-        {
-            "id": 169,
-            "code": "1INCH",
-            "name": "1inch Network",
-            "enable": true,
-            "wallet_regex": "^(0x)[0-9A-Fa-f]{40}$",
-            "priority": 168,
-            "extra_id_exists": false,
-            "extra_id_regex": null,
-            "logo_url": "/images/coins/1inch.svg",
-            "track": true,
-            "cg_id": "1inch",
-            "is_maxlimit": false,
-            "network": "eth",
-            "smart_contract": "0x111111111117dc0aa78b770fa6a738034120c302",
-            "network_precision": "18",
-            "explorer_link_hash": null,
-            "precision": 8,
-            "ticker": "1inch",
-            "is_defi": false,
-            "is_popular": false,
-            "is_stable": false,
-            "available_for_to_conversion": true
-        },
-        {
-            "id": 172,
-            "code": "1INCHBSC",
-            "name": "1Inch Network (BSC)",
-            "enable": true,
-            "wallet_regex": "^(0x)[0-9A-Fa-f]{40}$",
-            "priority": 171,
-            "extra_id_exists": false,
-            "extra_id_regex": null,
-            "logo_url": "/images/coins/1inchbsc.svg",
-            "track": true,
-            "cg_id": "1inch",
-            "is_maxlimit": false,
-            "network": "bsc",
-            "smart_contract": "0x111111111117dc0aa78b770fa6a738034120c302",
-            "network_precision": "18",
-            "explorer_link_hash": null,
-            "precision": 8,
-            "ticker": "1inch",
-            "is_defi": false,
-            "is_popular": false,
-            "is_stable": false,
-            "available_for_to_conversion": true
-        },
-        {
-            "id": 121,
-            "code": "AAVE",
-            "name": "Aave",
-            "enable": true,
-            "wallet_regex": "^(0x)[0-9A-Fa-f]{40}$",
-            "priority": 127,
-            "extra_id_exists": false,
-            "extra_id_regex": null,
-            "logo_url": "/images/coins/aave.svg",
-            "track": true,
-            "cg_id": "aave",
-            "is_maxlimit": false,
-            "network": "eth",
-            "smart_contract": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
-            "network_precision": "18",
-            "explorer_link_hash": "https://eth-explorer.nownodes.io/tx/:hash",
-            "precision": 8,
-            "ticker": "aave",
-            "is_defi": false,
-            "is_popular": false,
-            "is_stable": false,
-            "available_for_to_conversion": true
-        },
-        {
-            "id": 21,
-            "code": "ADA",
-            "name": "Cardano",
-            "enable": true,
-            "wallet_regex": "^([1-9A-HJ-NP-Za-km-z]{59,104})|([0-9A-Za-z]{58,104})$",
-            "priority": 21,
-            "extra_id_exists": false,
-            "extra_id_regex": null,
-            "logo_url": "/images/coins/ada.svg",
-            "track": false,
-            "cg_id": "cardano",
-            "is_maxlimit": false,
-            "network": "ada",
-            "smart_contract": null,
-            "network_precision": "6",
-            "explorer_link_hash": null,
-            "precision": 8,
-            "ticker": "ada",
-            "is_defi": false,
-            "is_popular": false,
-            "is_stable": false,
-            "available_for_to_conversion": true
-        },
-        {
-            "id": 48,
-            "code": "AE",
-            "name": "AE",
-            "enable": true,
-            "wallet_regex": "^ak_[A-Za-z0-9]{49,52}$",
-            "priority": 15,
-            "extra_id_exists": false,
-            "extra_id_regex": null,
-            "logo_url": "/images/coins/ae.svg",
-            "track": true,
-            "cg_id": "aeternity",
-            "is_maxlimit": false,
-            "network": null,
-            "smart_contract": null,
-            "network_precision": null,
-            "explorer_link_hash": null,
-            "precision": 8,
-            "ticker": null,
-            "is_defi": false,
-            "is_popular": false,
-            "is_stable": false,
-            "available_for_to_conversion": true
-        }
-    ]
+  "data": [
+    {
+      "id": 169,
+      "code": "1INCH",
+      "name": "1inch Network",
+      "enable": true,
+      "wallet_regex": "^(0x)[0-9A-Fa-f]{40}$",
+      "priority": 168,
+      "extra_id_exists": false,
+      "extra_id_regex": null,
+      "logo_url": "/images/coins/1inch.svg",
+      "track": true,
+      "cg_id": "1inch",
+      "is_maxlimit": false,
+      "network": "eth",
+      "smart_contract": "0x111111111117dc0aa78b770fa6a738034120c302",
+      "network_precision": "18",
+      "explorer_link_hash": null,
+      "precision": 8,
+      "ticker": "1inch",
+      "is_defi": false,
+      "is_popular": false,
+      "is_stable": false,
+      "available_for_to_conversion": true
+    },
+    {
+      "id": 172,
+      "code": "1INCHBSC",
+      "name": "1Inch Network (BSC)",
+      "enable": true,
+      "wallet_regex": "^(0x)[0-9A-Fa-f]{40}$",
+      "priority": 171,
+      "extra_id_exists": false,
+      "extra_id_regex": null,
+      "logo_url": "/images/coins/1inchbsc.svg",
+      "track": true,
+      "cg_id": "1inch",
+      "is_maxlimit": false,
+      "network": "bsc",
+      "smart_contract": "0x111111111117dc0aa78b770fa6a738034120c302",
+      "network_precision": "18",
+      "explorer_link_hash": null,
+      "precision": 8,
+      "ticker": "1inch",
+      "is_defi": false,
+      "is_popular": false,
+      "is_stable": false,
+      "available_for_to_conversion": true
+    },
+    {
+      "id": 121,
+      "code": "AAVE",
+      "name": "Aave",
+      "enable": true,
+      "wallet_regex": "^(0x)[0-9A-Fa-f]{40}$",
+      "priority": 127,
+      "extra_id_exists": false,
+      "extra_id_regex": null,
+      "logo_url": "/images/coins/aave.svg",
+      "track": true,
+      "cg_id": "aave",
+      "is_maxlimit": false,
+      "network": "eth",
+      "smart_contract": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+      "network_precision": "18",
+      "explorer_link_hash": "https://eth-explorer.nownodes.io/tx/:hash",
+      "precision": 8,
+      "ticker": "aave",
+      "is_defi": false,
+      "is_popular": false,
+      "is_stable": false,
+      "available_for_to_conversion": true
+    },
+    {
+      "id": 21,
+      "code": "ADA",
+      "name": "Cardano",
+      "enable": true,
+      "wallet_regex": "^([1-9A-HJ-NP-Za-km-z]{59,104})|([0-9A-Za-z]{58,104})$",
+      "priority": 21,
+      "extra_id_exists": false,
+      "extra_id_regex": null,
+      "logo_url": "/images/coins/ada.svg",
+      "track": false,
+      "cg_id": "cardano",
+      "is_maxlimit": false,
+      "network": "ada",
+      "smart_contract": null,
+      "network_precision": "6",
+      "explorer_link_hash": null,
+      "precision": 8,
+      "ticker": "ada",
+      "is_defi": false,
+      "is_popular": false,
+      "is_stable": false,
+      "available_for_to_conversion": true
+    },
+    {
+      "id": 48,
+      "code": "AE",
+      "name": "AE",
+      "enable": true,
+      "wallet_regex": "^ak_[A-Za-z0-9]{49,52}$",
+      "priority": 15,
+      "extra_id_exists": false,
+      "extra_id_regex": null,
+      "logo_url": "/images/coins/ae.svg",
+      "track": true,
+      "cg_id": "aeternity",
+      "is_maxlimit": false,
+      "network": null,
+      "smart_contract": null,
+      "network_precision": null,
+      "explorer_link_hash": null,
+      "precision": 8,
+      "ticker": null,
+      "is_defi": false,
+      "is_popular": false,
+      "is_stable": false,
+      "available_for_to_conversion": true
+    }
+  ]
 }
 ```
 - 4xx `<Errors from incomplete request body>`
