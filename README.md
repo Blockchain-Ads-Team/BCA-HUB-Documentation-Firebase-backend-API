@@ -616,6 +616,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
   info:            (object):{
                               "name": "The user's new name for update",
                               "email": "The user's new email for the update",
+                              "password": "The user's new password"
                               "profile_image": "The link to the user's new profile image hosted on our Google storage"
                             }
 }
