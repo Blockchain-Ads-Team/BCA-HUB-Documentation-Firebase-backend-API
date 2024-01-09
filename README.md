@@ -247,13 +247,15 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ##### (4)
 **ENDPOINT:** ```/loadCampaignData``` </br>
 **ACTION:** POST </br>
-**DETAIL:** This endpoint is for getting all of the organization's campaign data on a user's profile. It pulls all the campaign ID, and retrieves the data for that campaign, which is returned. It should be called after the loadprofile endpoint as the currentOrganizationID required to make a valud loadCampaignData is returned in the loadUserProfile endpoint. You could add an animation, as it would take longer, due to the provider not creating an endpoint to directly check for the campaign status, and this has to be done one after the other. It takes authorization token for route protection.</br>
+**DETAIL:** This endpoint is for getting all of the organization's campaign data on a user's profile. It pulls all the campaign ID, and retrieves the data for that campaign, which is returned in the response body. It should be called after the loadprofile endpoint as the currentOrganizationID required to make a valud loadCampaignData is returned in the loadUserProfile endpoint. You could add an animation, as it would take longer, due to the provider not creating an endpoint to directly check for the campaign status, and this has to be done one after the other. Also, in the response is a field called extraDataAvailable, this field resolves to true or false, depending on if the there is data on the next page. This lets the frontend able to show a next page or not, according to, if there is extra data   It takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  uuid:    (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  currentOrganizationID: "The user's current organization ID, returned in the response of the loadUserProfile endpoint call"
+  uuid:                 (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  currentOrganizationID (String): "The user's current organization ID, returned in the response of the loadUserProfile endpoint call"
+  page                  (Number): "The pagination field to specify the page to be loaded maximum item per page is defined by the pageSize field below."
+  pageSize:             (Number): This defines how many items should be on the page. From the UI, the accepted options are "5, 10, or 15".
 }
 ```
 
@@ -267,6 +269,8 @@ myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>"
   "currentOrganizationID": "<currentOrganizationID>"
+  "page": 1,
+  "pageSize": 10
 });
 
 var requestOptions = {
@@ -1224,13 +1228,17 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/checkPaymen
                       {
                         campaignName:(String): Name of the Campaign being created,
                         targetURL:(String): The url that ad clicker would be sent to,
-                        startDate: The date for the ads to be started in dd/MM/YYYY format,
+                        startDate: The date for the ads to be started in DD/MM/YYYY format,
                         budget:(Number): The budget amount for campaign,
                         maxCPC:(Number): This is the price a user is willing to pay for a click on an advert shown,
                         timezone:(Number): The timezone for the advert to be shown,
                         smartContractAddress:(String): The smart contract address of the organization being advertised, 
                         chainTargeting:(Array): The blockchain network being targeted,
-                        operatingSystem:(Array): The operating system option wanted by the advertiser for their ads to be shown on. Example: ["mobile", "desktop"],
+                        operativeSystem:(Array): The operating system option wanted by the advertiser for their ads to be shown on. Example: ["mobile", "desktop"],
+                        category:(Array): This is the array of category, as specified from the model page,
+                        web3Audience:(Array): This is the array of web3Audience as specified by the model page,
+                        walletTargeting:(Array): This is the array of wallet Targeting as specified by the model page,
+                        browser:(Array): This is the array of browser as specified by the model page,
                         deviceType:(Array): The type of devices the advert should be shown to. Example:[ "ios", "android", "window", "linux", "mac_os"]
                       }
   creatives:          (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
@@ -1246,30 +1254,61 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/checkPaymen
 
 ###### USAGE EXAMPLE(Javascript)
 ```javascript
-
 var myHeaders = new Headers();
-myHeaders.append("Authorization", "\"Bearer <token>\"");
+myHeaders.append("Authorization", "<Bearer token>");
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "uuid": "<user-unique-ID>",
+  "uuid": "0mPPJjSttgcMJjItLHWhhDzZv383",
   "campaignInfo": {
-    "campaignName": "API Test Campaign",
+    "campaignName": "Budget Test2 API Campaign",
     "targetURL": "https://abc.xyz",
-    "startDate": "23/12/2023"
-    "budget": "500",
+    "startDate": "09/01/2024",
+    "budget": 500,
     "maxCPC": "0.25",
     "timezone": 3,
     "smartContractAddress": "0x0000000000000000000000000000000000001000",
-    "chainTargeting": ["BSCSCAN"],
-    "operatingSystem": [],
-    "deviceType": []
+    "campaignType": [
+      "Awareness(max reach)",
+      "Engagement(website visit/interaction)",
+      "Conversion(website download/transactions/sales)"
+    ],
+    "chainTargeting": [
+      "Ethereum",
+      "Polygon",
+      "Binance Smart Chain"
+    ],
+    "operativeSystem": [
+      "android",
+      "iOS"
+    ],
+    "category": [
+      "NFT",
+      "Decentralized Finance",
+      "DEX"
+    ],
+    "web3Audience": [
+      "ETH Holders",
+      "BNB Holders"
+    ],
+    "walletTargeting": [
+      "Metamask",
+      "Coinbase",
+      "OKX"
+    ],
+    "deviceType": [
+      "mobile"
+    ],
+    "browser": [
+      "Google Chrome",
+      "Firefox"
+    ]
   },
   "creatives": [
     {
-      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAFIAQMAAACoaV/bAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAACtJREFUeJztwYEAAAAAw6D5U1/gCFUBAAAAAAAAAAAAAAAAAAAAAAAAAHwDULgAAVNxxnoAAAAASUVORK5CYII=",
-      "title": "API creative title push",
-      "status": 1
+      "status": 1,
+      "title": " Test API Title",
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAFIAQMAAACoaV/bAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAACtJREFUeJztwYEAAAAAw6D5U1/gCFUBAAAAAAAAAAAAAAAAAAAAAAAAAHwDULgAAVNxxnoAAAAASUVORK5CYII="
     }
   ]
 });
@@ -1281,11 +1320,10 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/createNewCampaign", requestOptions)
+fetch("http://localhost:5000/web3-marketing-hub/us-central1/api/createNewCampaign", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
-
 ```
 
 ###### RESPONSE DATA(JSON)
@@ -1296,51 +1334,6 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/createNewCa
 ---
 
 ##### (2)
-**ENDPOINT:** ```/viewCampaignInfo``` </br>
-**ACTION:** POST </br>
-**DETAIL:** This endpoint retrieves info about a campaign with its ID. Now takes authorization token for route protection.</br>
-
-**REQUEST DATA(JSON):** All data in body is required for a valid request.
-```
-{
-  uuid:                (String): "The unique ID for the user making the payment",
-  campaignId:          (Number): "The ID for the campaign to be viewed",
-}
-```
-
-###### USAGE EXAMPLE(Javascript)
-```javascript
-
-var myHeaders = new Headers();
-myHeaders.append("Authorization", "\"Bearer <token>\"");
-myHeaders.append("Content-Type", "application/json");
-
-var raw = JSON.stringify({
-  "uuid": "<user-unique-ID>",
-  "campaignId": 7736830
-});
-
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/viewCampaignInfo", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-```
-
-###### RESPONSE DATA(JSON)
-- 200 `{res_sts: true, res_msg: Campaign data retrieved successfully, data}`
-- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
-- 5xx `{res_sts: false, res_msg: error.message}`
-
----
-
-##### (3)
 **ENDPOINT:** ```/updateCampaignInfo``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates a campaign info/data via its ID, with the new info/data. Now takes authorization token for route protection.</br>
@@ -1395,7 +1388,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateCampa
 
 ---
 
-##### (4)
+##### (3)
 **ENDPOINT:** ```/playOrPauseCampaign``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates a campaign info/data via its ID, with the new info/data. Now takes authorization token for route protection.</br>
@@ -1443,7 +1436,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/startOrStop
 
 ---
 
-##### (5)
+##### (4)
 **ENDPOINT:** ```/updateURL``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates a campaign info/data target URL, with a new URL, the URL is where viewers of the Ads are directed to, when they click. Now takes authorization token for route protection.</br>
@@ -1490,7 +1483,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateURL",
 
 ---
 
-##### (6)
+##### (5)
 **ENDPOINT:** ```/addNewCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates a campaign info/data target URL, with a new URL, the URL is where viewers of the Ads are directed to, when they click. Now takes authorization token for route protection.</br>
@@ -1548,7 +1541,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/addNewCreat
 
 ---
 
-##### (7)
+##### (6)
 **ENDPOINT:** ```/startOrStopCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates/edits an already created creative. Now takes authorization token for route protection.</br>
