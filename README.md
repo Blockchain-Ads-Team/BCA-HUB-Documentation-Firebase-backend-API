@@ -1486,12 +1486,13 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateURL",
 ##### (5)
 **ENDPOINT:** ```/addNewCreative``` </br>
 **ACTION:** POST </br>
-**DETAIL:** This endpoint updates a campaign info/data target URL, with a new URL, the URL is where viewers of the Ads are directed to, when they click. Now takes authorization token for route protection.</br>
+**DETAIL:** This endpoint updates a campaign creative information. Users can add a new creative to a campaign. Now takes authorization token for route protection.</br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
   uuid:              (String): "The unique ID for the user making the payment",
+  organizationID:    (String): "The ID for the organization where the campaign sits in",
   campaignId:        (Number): "The ID for the campaign to be viewed",
   creative:          (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
                       [
@@ -1512,7 +1513,8 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>",
-  "campaignId": 7737040,
+  "organizationID":  "<organization-ID>",
+  "campaignId": "<campaign-ID>",
   "creatives": [
     {
       "title": " Test API Title",
@@ -1542,6 +1544,68 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/addNewCreat
 ---
 
 ##### (6)
+**ENDPOINT:** ```/editCreative``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This updates a previous creative, to change the name, title, or the image. Now takes authorization token for route protection.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:              (String): "The unique ID for the user making the payment",
+  organizationID:    (String): "The ID for the organization where the campaign sits in",
+  campaignId:        (Number): "The ID for the campaign that contains the creative",
+  creativeId:        (Number): "The ID for the creative been edited",
+  creative:          (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
+                      [
+                        {
+                          image:(String) "base 64 image string, that conforms to the propellerAds standard"
+                          title:(String): The title of the creative being created,
+                        }
+                      ]
+}
+
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer <token>\"");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>",
+  "organizationID": "<organization-ID>"
+  "campaignID": "<campaign-ID>",
+  "creativeId": "<creativeId>",
+  "creatives": [
+    {
+      "title": " Test API Title",
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAFIAQMAAACoaV/bAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAACtJREFUeJztwYEAAAAAw6D5U1/gCFUBAAAAAAAAAAAAAAAAAAAAAAAAAHwDULgAAVNxxnoAAAAASUVORK5CYII="
+    }
+  ]
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/editCreative", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Creative(s) updated successfully}`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (7)
 **ENDPOINT:** ```/startOrStopCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates/edits an already created creative. Now takes authorization token for route protection.</br>
