@@ -104,7 +104,6 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailabl
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  organization:    (String): "This is the name for the organization from the form input",
   email:           (String): "The email address for the new user from the form input",
   password:        (String): "The user's account password from the form",
   invited:         (Boolean): "This endpoint resolves to true or false from the url parameter. If the user is invited, it is true, if the user is not invited it stays false",
@@ -119,7 +118,6 @@ var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "organization": "<organization-Name>",
   "email": "<user-email>",
   "password": "<user-password>",
   "invited": "<true|false>",
@@ -253,9 +251,9 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ```
 {
   uuid:                 (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  currentOrganizationID (String): "The user's current organization ID, returned in the response of the loadUserProfile endpoint call"
-  page                  (Number): "The pagination field to specify the page to be loaded maximum item per page is defined by the pageSize field below."
-  pageSize:             (Number): This defines how many items should be on the page. From the UI, the accepted options are "5, 10, or 15".
+  currentOrganizationID (String): "The user's current organization ID, returned in the response of the loadUserProfile endpoint call",
+  page                  (Number): "The pagination field to specify the page to be loaded maximum item per page is defined by the pageSize field below.",
+  pageSize:             (Number): This defines how many items should be on the page. From the UI, the accepted options are "5, 10, or 15",
 }
 ```
 
@@ -355,7 +353,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadBlockch
 ```
 {
   uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  authCode:               (String): "String for code retrieved from Google authorization"
+  authCode:               (String): "String for code retrieved from Google authorization",
 }
 ```
 
@@ -399,7 +397,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/connectAnal
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK"
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
 }
 ```
 
@@ -442,7 +440,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/disconnectA
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK"
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
 }
 ```
 
@@ -478,8 +476,10 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyti
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK"
-  projectID:             (String): "The id for the project to be queried."
+  uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
+  projectID:             (String): "The id for the project to be queried.",
+  startDate:             (String): "The start date for the analytics data to be pulled from in DD/MM/YYYY format. It is optional and if not provided, it uses 30days from the day",
+  endDate:               (String): "The end date for the analytics data to be pulled from in DD/MM/YYYY format. It is optional and if not provided, it uses yesterday as the day",
 }
 ```
 
@@ -524,7 +524,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyti
 ```
 {
   uuid:          (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  organizationID:(String): ID for the organization. This is loaded in when a user is logged in, you can then make it the value of the drop down for the organization selection. When a user select to switch an organization, it picks up that organization id. 
+  organizationID:(String): "ID for the organization. This is loaded in when a user is logged in, you can then make it the value of the drop down for the organization selection. When a user select to switch an organization, it picks up that organization id.",
 }
 ```
 
@@ -570,7 +570,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 ```
 {
   uuid:            (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  organizationName:(String): Name for the organization during creation. 
+  organizationName:(String): "Name for the organization during creation.",
 }
 ```
 
@@ -618,10 +618,12 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 {
   uuid:            (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
   info:            (object):{
-                              "name": "The user's new name for update",
-                              "email": "The user's new email for the update",
-                              "password": "The user's new password"
-                              "profile_image": "The link to the user's new profile image hosted on our Google storage"
+                              name: "The user's new name for update",
+                              email: "The user's new email for the update",
+                              password: "The user's new password",
+                              profile_image: "The link to the user's new profile image hosted on our Google storage",
+                              organizationName: "The new name for the organization, works only if organization Admin"
+                              organizationID: "The organization ID which the user wants to change the name. If organizationName is not provided, organizationID would not be accepted. The two are only required during a name change."
                             }
 }
 ```
@@ -635,7 +637,14 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>",
-  "info": "{"name": "<user-name>", "email":"user-email", "phone_number":"<user-number>"}"
+  "info": {
+    "name": "<user-new-name>", 
+    "email":"<user-new-email>", 
+    "profile_image":"<user-new-profile-image>",
+    "password":"<user-new-password>",
+    "organizationName":"<user-new-organization-name>"
+    "organizationID":"<user-current-organization-ID>"
+    }
   "profile_image": "<image-URL>"
 });
 
@@ -671,7 +680,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
   uuid:             (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
   organizationID:   (String): "ID for the organization the new user is being invited into",
   senderName:       (String): "This is the name of the sender, picked up from the user object returned in the SDK",
-  inviteeEmail:     (String): "The email for the user being invited into the organization"
+  inviteeEmail:     (String): "The email for the user being invited into the organization",
 }
 ```
 
@@ -719,7 +728,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/inviteUser"
 ```
 {
   uuid:             (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  organizationID:   (String): "ID for the organization the new user is being invited into"
+  organizationID:   (String): "ID for the organization the new user is being invited into",
 }
 ```
 
@@ -765,7 +774,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/acceptInvit
 ```
 {
   uuid:             (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
-  organizationID:   (String): "ID for the organization the new user is being invited into"
+  organizationID:   (String): "ID for the organization the new user is being invited into",
 }
 ```
 
@@ -810,7 +819,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/rejectInvit
 **REQUEST DATA(JSON):** All data in the  body is required for a valid request.
 ```
 {
- "email": "Them email address of the user requesting a password chane"
+ "email": "The email address of the user requesting a password change",
 }
 ```
 
@@ -1086,7 +1095,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/paymentOnSi
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  price_amount:        (number): This is the fiat equivalent of the price to be paid in crypto in USD,
+  price_amount:      (number): "This is the fiat equivalent of the price to be paid in crypto in USD",
   uuid:              (String): "The unique ID for the user making the payment",
 }
 ```
@@ -1150,7 +1159,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/paymentWith
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  paymentId:        (string): Unique ID corresponding to a valid user's payment transaction,
+  paymentId:        (string): "Unique ID corresponding to a valid user's payment transaction",
 }
 ```
 
@@ -1396,9 +1405,10 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateCampa
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
 ```
 {
-  uuid:                (String): "The unique ID for the user making the payment",
-  campaignId:          (Number): "The ID for the campaign to be viewed",
-  toPlayCampaign:      (Boolean): "To stop campaign, set to false, to start, set to true"
+  uuid:              (String): "The unique ID for the user making the payment",
+  organizationID:    (String): "The ID for the organization where the campaign is",,
+  campaignId:        (Number): "The ID for the campaign to be paused or started",
+  toPlayCampaign:    (Boolean): "To stop campaign, set to false, to start, set to true",
 }
 
 ```
@@ -1411,8 +1421,9 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>",
-  "creativeId": 19823539,
-  "toPlayCreative": false
+  "organizationID": "<organization-ID>",
+  "campaignId": "<campaign-ID>",
+  "toPlayCampaign": false
 });
 
 var requestOptions = {
@@ -1422,7 +1433,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/startOrStopCreative", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/playOrPauseCampaign", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -1446,7 +1457,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/startOrStop
 {
   uuid:                (String): "The unique ID for the user making the payment",
   campaignId:          (Number): "The ID for the campaign to be viewed",
-  newTargetUrl:        (String): "The new target URL to update to"
+  newTargetUrl:        (String): "The new target URL to update",
 }
 
 ```
@@ -1492,7 +1503,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateURL",
 ```
 {
   uuid:              (String): "The unique ID for the user making the payment",
-  organizationID:    (String): "The ID for the organization where the campaign sits in",
+  organizationID:    (String): "The ID for the organization where the campaign is",
   campaignId:        (Number): "The ID for the campaign to be viewed",
   creative:          (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
                       [
@@ -1615,7 +1626,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/editCreativ
 {
   uuid:                (String): "The unique ID for the user making the payment",
   creativeId:          (Number): "The ID for the campaign to be edited/updated",
-  toPlayCreative:      (Boolean): "To stop creative, set to false, to start, set to true"
+  toPlayCreative:      (Boolean): "To stop creative, set to false, to start, set to true",
 }
 
 ```
