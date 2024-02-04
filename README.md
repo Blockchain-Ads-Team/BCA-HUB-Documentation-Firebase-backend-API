@@ -51,7 +51,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailabl
 
 ##### (2)
 **ENDPOINT:** ```/APIavailableWithAuth``` </br>
-**ACTION:** GET </br>
+**ACTION:** POST </br>
 **DETAIL:** This endpoint works almost the same way as the endpoint above, APIavailable, but in this case, it takes in uuid, and the user authorization token in its header, to ensure that a user is logged in and that the same user is the one making an API call. </br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -73,7 +73,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'GET',
+  method: 'POST',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
