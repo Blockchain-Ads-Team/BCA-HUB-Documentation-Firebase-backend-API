@@ -51,7 +51,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/APIavailabl
 
 ##### (2)
 **ENDPOINT:** ```/APIavailableWithAuth``` </br>
-**ACTION:** POST </br>
+**ACTION:** GET </br>
 **DETAIL:** This endpoint works almost the same way as the endpoint above, APIavailable, but in this case, it takes in uuid, and the user authorization token in its header, to ensure that a user is logged in and that the same user is the one making an API call. </br>
 
 **REQUEST DATA(JSON):** All data in body is required for a valid request.
@@ -73,7 +73,7 @@ var raw = JSON.stringify({
 });
 
 var requestOptions = {
-  method: 'POST',
+  method: 'GET',
   headers: myHeaders,
   body: raw,
   redirect: 'follow'
@@ -478,8 +478,8 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyti
 {
   uuid:                  (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
   projectID:             (String): "The id for the project to be queried.",
-  startDate:             (String): "The start date for the analytics data to be pulled from in DD/MM/YYYY format. It is optional and if not provided, it uses 30days from the day",
-  endDate:               (String): "The end date for the analytics data to be pulled from in DD/MM/YYYY format. It is optional and if not provided, it uses yesterday as the day",
+  startDate:             (String): "The start date for the analytics data to be pulled from in YYYY-MM-DD format. It is optional and if not provided, it uses 30days from the day",
+  endDate:               (String): "The end date for the analytics data to be pulled from in YYYY-MM-DD format. It is optional and if not provided, it uses yesterday as the day",
 }
 ```
 
@@ -491,7 +491,9 @@ myHeaders.append("Authorization", "Bearer <token>");
 
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>",
-  "projectID": "<project-id>"
+  "projectID": "<project-id>",
+  "startDate": "YYYY-MM-DD",
+  "endDate": "YYYY-MM-DD"
 });
 
 var requestOptions = {
