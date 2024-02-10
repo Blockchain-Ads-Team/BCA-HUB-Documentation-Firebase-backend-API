@@ -184,7 +184,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/completeSIgnUp", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/completeSignUp", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
@@ -1358,7 +1358,7 @@ fetch("http://localhost:5000/web3-marketing-hub/us-central1/api/createNewCampaig
   newCampaignInfo:     (Object): "This is the object that contains the new campaign Info"":
                                {
                                   name:(String): "New Campaign Name",
-                                  limit_total_amount:(Number): "New Campaign Total Limit"
+                                  limit_daily_amount:(Number): "New Campaign daily Limit"
                                }
 }
 ```
