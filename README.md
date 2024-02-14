@@ -433,7 +433,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/disconnectA
 ---
 
 ##### (8)
-**ENDPOINT:** ```/loadAnalyticsProject``` </br>
+**ENDPOINT:** ```/loadAnalyticsProfile``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint works to retrieve a summary of the user's Google profile data, all their connected and monitored projects with their IDs. The IDs can then be used in the next endpoint call to query the data for those projects.</br>
 
@@ -469,7 +469,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyti
 ```
 
 ##### (9)
-**ENDPOINT:** ```/loadAnalyticsProfile``` </br>
+**ENDPOINT:** ```/loadAnalyticsProject``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint works to retrieve all the data related to a project, The project is identified by it's project ID, whcich is sent as a part of the JSON payload.</br>
 
@@ -503,7 +503,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyticsProfile", requestOptions)
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadAnalyticsProject", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
