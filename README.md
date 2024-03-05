@@ -1450,6 +1450,54 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/playOrPause
 ---
 
 ##### (4)
+**ENDPOINT:** ```/deleteCampaign``` </br>
+**ACTION:** POST </br>
+**DETAIL:** This endpoint deleted a campaign info/data via its ID.</br>
+
+**REQUEST DATA(JSON):** All data in body is required for a valid request.
+```
+{
+  uuid:              (String): "The unique ID for the user making the payment",
+  organizationID:    (String): "The ID for the organization where the campaign is",,
+  campaignId:        (Number): "The ID for the campaign to be paused or started",
+}
+
+```
+
+###### USAGE EXAMPLE(Javascript)
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "\"Bearer <token>\"");
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "uuid": "<user-unique-ID>",
+  "organizationID": "<organization-ID>",
+  "campaignId": "<campaign-ID>",
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/deleteCampaign", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+```
+
+###### RESPONSE DATA(JSON)
+- 200 `{res_sts: true, res_msg: Campaign deleted successfully}`
+- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
+- 5xx `{res_sts: false, res_msg: error.message}`
+
+---
+
+##### (4)
 **ENDPOINT:** ```/updateURL``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates a campaign info/data target URL, with a new URL, the URL is where viewers of the Ads are directed to, when they click. Now takes authorization token for route protection.</br>
