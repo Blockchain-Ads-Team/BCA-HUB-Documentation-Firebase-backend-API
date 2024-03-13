@@ -252,7 +252,8 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/loadUserPro
 {
   uuid:                 (String): "All that is required is the uuid to identify the user in the DB, the Firebase SDK returns that, so you can call the endpoint with the response from the SDK",
   currentOrganizationID (String): "The user's current organization ID, returned in the response of the loadUserProfile endpoint call",
-  dateRange:            (Array):  "This is an array of dates which is optional, if not provided, the last 7days is used",
+  dateFrom:             (String): "This is the date from which the data from the database is started from. It is in the format DD/MM/YYYY ",
+  dateTill:             (String): "This is the end date that the data would stop, the and range of the data collected from the DB. It is also in the format DD/MM/YYYY",
   page                  (Number): "The pagination field to specify the page to be loaded maximum item per page is defined by the pageSize field below.",
   pageSize:             (Number): "This defines how many items should be on the page. From the UI, the accepted options are "5, 10, or 15",
 }
@@ -268,9 +269,10 @@ myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>"
   "currentOrganizationID": "<currentOrganizationID>"
+  "dateFrom": "01/03/2024",
+  "dateTill": "10/03/2024",
   "page": 1,
   "pageSize": 10
-  "dateRange": ["06/03/2024", "10/03/2024", "12/03/2024"]
 });
 
 var requestOptions = {
