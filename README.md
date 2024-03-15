@@ -1368,8 +1368,9 @@ fetch("http://localhost:5000/web3-marketing-hub/us-central1/api/createNewCampaig
   creatives:            (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
                       [
                         {
-                          image:(String) "base 64 image string, that conforms to the propellerAds standard"
-                          title:(String): The title of the creative being created,
+                          id:   (String): "ID from already existing creatives, if not, 'new' is inserted"
+                          image:(String): "base 64 image string, that conforms to the propellerAds standard"
+                          title:(String): 'The title of the creative being created",
                         }
                       ]
 }
@@ -1392,6 +1393,7 @@ var raw = JSON.stringify({
   },
   "creatives": [
     {
+      "id": "creative id if available, 'new' if not."
       "title": " Update creative Test",
       "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAFIAQMAAACoaV/bAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAACtJREFUeJztwYEAAAAAw6D5U1/gCFUBAAAAAAAAAAAAAAAAAAAAAAAAAHwDULgAAVNxxnoAAAAASUVORK5CYII="
     }
