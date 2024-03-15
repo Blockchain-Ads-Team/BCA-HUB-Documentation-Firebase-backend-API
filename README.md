@@ -1357,13 +1357,21 @@ fetch("http://localhost:5000/web3-marketing-hub/us-central1/api/createNewCampaig
 ```
 {
   uuid:                (String): "The unique ID for the user making the payment",
+  organizationID:      (String): "The ID for the organization where the campaign is",
   campaignId:          (Number): "The ID for the campaign to be viewed",
   creatorEmail:        (String): "This is the email of the creator of the campaign",
   newCampaignInfo:     (Object): "This is the object that contains the new campaign Info"":
                                {
                                   name:(String): "New Campaign Name",
                                   limit_daily_amount:(Number): "New Campaign daily Limit"
-                               }
+                               },
+  creatives:            (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
+                      [
+                        {
+                          image:(String) "base 64 image string, that conforms to the propellerAds standard"
+                          title:(String): The title of the creative being created,
+                        }
+                      ]
 }
 ```
 
@@ -1375,12 +1383,19 @@ myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
   "uuid": "<user-unique-ID>",
+  "organizationID": "<orgID>"
   "campaignId": 7737034,
   "creatorEmail": "abMan@gmail.com",
   "newCampaignInfo": {
     "name": "Hookah Test",
     "limit_total_amount": 500
-  }
+  },
+  "creatives": [
+    {
+      "title": " Update creative Test",
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAFIAQMAAACoaV/bAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAACtJREFUeJztwYEAAAAAw6D5U1/gCFUBAAAAAAAAAAAAAAAAAAAAAAAAAHwDULgAAVNxxnoAAAAASUVORK5CYII="
+    }
+  ]
 });
 
 var requestOptions = {
@@ -1549,66 +1564,6 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/updateURL",
 ---
 
 ##### (5)
-**ENDPOINT:** ```/addNewCreative``` </br>
-**ACTION:** POST </br>
-**DETAIL:** This endpoint updates a campaign creative information. Users can add a new creative to a campaign. Now takes authorization token for route protection.</br>
-
-**REQUEST DATA(JSON):** All data in body is required for a valid request.
-```
-{
-  uuid:              (String): "The unique ID for the user making the payment",
-  organizationID:    (String): "The ID for the organization where the campaign is",
-  campaignId:        (Number): "The ID for the campaign to be viewed",
-  creative:          (Array): "This is an array that contains creative objects, the creative  objects are the advert images and title used in the campaign, it can contain multiple creative objects":
-                      [
-                        {
-                          image:(String) "base 64 image string, that conforms to the propellerAds standard"
-                          title:(String): The title of the creative being created,
-                        }
-                      ]
-}
-
-```
-
-###### USAGE EXAMPLE(Javascript)
-```javascript
-var myHeaders = new Headers();
-myHeaders.append("Authorization", "\"Bearer <token>\"");
-myHeaders.append("Content-Type", "application/json");
-
-var raw = JSON.stringify({
-  "uuid": "<user-unique-ID>",
-  "organizationID":  "<organization-ID>",
-  "campaignId": "<campaign-ID>",
-  "creatives": [
-    {
-      "title": " Test API Title",
-      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAewAAAFIAQMAAACoaV/bAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAACtJREFUeJztwYEAAAAAw6D5U1/gCFUBAAAAAAAAAAAAAAAAAAAAAAAAAHwDULgAAVNxxnoAAAAASUVORK5CYII="
-    }
-  ]
-});
-
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-
-fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/addNewCreative", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-```
-
-###### RESPONSE DATA(JSON)
-- 200 `{res_sts: true, res_msg: Creative(s) added successfully, data}`
-- 4xx `{res_sts: false, res_msg: <Errors from incomplete request body>}`
-- 5xx `{res_sts: false, res_msg: error.message}`
-
----
-
-##### (6)
 **ENDPOINT:** ```/editCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This updates a previous creative, to change the name, title, or the image. Now takes authorization token for route protection.</br>
@@ -1670,7 +1625,7 @@ fetch("https://us-central1-web3-marketing-hub.cloudfunctions.net/api/editCreativ
 
 ---
 
-##### (7)
+##### (6)
 **ENDPOINT:** ```/startOrStopCreative``` </br>
 **ACTION:** POST </br>
 **DETAIL:** This endpoint updates/edits an already created creative. Now takes authorization token for route protection.</br>
